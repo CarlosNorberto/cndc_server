@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-    res.send('Hola!!');
+    res.send('CNDC Server');
 });
 
 require('./routes/routes')(app);
@@ -29,22 +29,12 @@ cron.schedule('*/1 * * * * *', () => {
         timezone: 'America/La_Paz'
     });
 
-// SELECT 
-// IDACCESO, ANTENNA_NUMBER, ID_READER_RFID, 
-// IDDISPOSITIVO, IDPERSONA, FECHA, 
-// HORA, IDTIPO, SATISFACTORIO, 
-// DESCRIPCION, IDTEMPACCESO, IDTEMPACCESOVEHICULO, 
-// IDCAPTURA, FECHA_ELIMINACION, USUARIO_ELIMINACION, 
-// FECHA_CREACION, USUARIO_CREACION, FECHA_MODIFICACION, 
-// USUARIO_MODIFICACION, IDPROCESADO, IDCORREGIDO, 
-// IDHORARIO, EPC, TID
-// FROM CAPTURE.ACCESO WHERE IDACCESO=2491
-
 async function getCronAccesos(){
-    var result = await accesos.getAccesosCron(`SELECT v.* FROM CAPTURE.VACCESOS v`);
+    try {
+        var result = await accesos.getAccesosCron(`SELECT v.* FROM OCACCESS.VACCESOS v`);
+        io.emit('get-accesos', result);
+    } catch (error) {
+        console.log(error);
+    }
 
-    io.emit('get-accesos', result);
-
-    console.log(result);
-    console.log('Runing a job at 01:00 at America/Sao_Paulo timezone');
 }

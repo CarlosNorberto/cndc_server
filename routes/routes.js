@@ -14,6 +14,8 @@ module.exports = (app) => {
                 IDHORARIO, EPC, TID
                 FROM CAPTURE.ACCESO WHERE IDACCESO=2491`;
         accesos.getAllAccesos(sql, [], res);
-    })
+    });
+
+    app.get('/api/get-photo/:photo',accesos.getPhoto);
 
 }
